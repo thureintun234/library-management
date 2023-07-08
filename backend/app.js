@@ -6,6 +6,7 @@ const logger = require("./utils/logger");
 const morgan = require("morgan");
 const morganFormat = require("./utils/morgan");
 const mongoose = require("mongoose");
+const path = require("path");
 const app = express();
 
 const usersRouter = require("./routes/user.route");
@@ -29,6 +30,9 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan(morganFormat));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
+// accepting uploaded photos
+app.use(`${BASE_URL}/uploads`, express.static(path.join(__dirname, "upload")));
 
 //routers
 app.use(`${BASE_URL}/users`, usersRouter);

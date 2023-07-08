@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 
 const createBook = async (req, res) => {
   try {
-    const { title, author, category } = req.body;
+    const { title, author, category, description } = req.body;
 
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -20,8 +20,15 @@ const createBook = async (req, res) => {
       title,
       author,
       category,
+      description,
       createdBy: req.user.id,
     });
+
+    if (req.file) {
+      const { filename } = req.file;
+      book.photo = filename;
+    }
+
     const savedBook = await book.save();
     res.status(201).json({ book: savedBook, message: "Book created" });
   } catch (error) {

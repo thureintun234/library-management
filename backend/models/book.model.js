@@ -14,6 +14,13 @@ const bookSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
+    photo: {
+      type: String,
+    },
     available: {
       type: Boolean,
       default: true,
