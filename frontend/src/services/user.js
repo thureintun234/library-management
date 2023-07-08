@@ -16,8 +16,10 @@ export const login = async (values) => {
       null
     );
 
-    if (response.data.user)
-      storeCache("user", JSON.stringify(response.data.user));
+    if (response.data.user) {
+      const { user, token } = response.data;
+      storeCache("user", JSON.stringify({ user, token }));
+    }
 
     toast.success("Login successful!");
 

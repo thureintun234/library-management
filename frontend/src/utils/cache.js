@@ -7,7 +7,7 @@ export const storeCache = (name, value) => {
 };
 
 export const getCache = (name) => {
-  localStorage.getItem(`${key}${name}`);
+  return localStorage.getItem(`${key}${name}`);
 };
 
 export const removeCache = (name) => {

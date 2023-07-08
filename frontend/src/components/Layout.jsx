@@ -5,27 +5,18 @@ import {
   List,
   ListItem,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import logo from "../assets/logo.png";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCache, removeCache } from "../utils/cache";
 
 const drawerWidth = 240;
-
-const menuItems = [
-  {
-    text: "Books",
-    path: "/",
-  },
-  {
-    text: "Create Book",
-    path: "/create",
-  },
-  { text: "Show User lists", path: "/lists" },
-];
-
 const useStyles = makeStyles({
   page: {
     background: "#f9f9f9",
@@ -49,6 +40,7 @@ const useStyles = makeStyles({
   title: {
     padding: "10px",
     color: "var(--primary-color)",
+    fontWeight: "bolder",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -57,9 +49,18 @@ const useStyles = makeStyles({
   },
   date: {
     flexGrow: 1,
+    color: "white",
   },
   avatar: {
     marginLeft: "10px",
+  },
+  avatarContainer: {
+    display: "flex",
+    alignItems: "center",
+    cursor: "pointer",
+  },
+  menuWidth: {
+    minWidth: 200,
   },
 });
 
@@ -67,6 +68,43 @@ const Layout = () => {
   const classes = useStyles();
   const location = useLocation();
   const navigate = useNavigate();
+  const [user, setUser] = useState({});
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  useEffect(() => {
+    const jsonUser = getCache("user");
+    if (jsonUser) {
+      setUser(JSON.parse(jsonUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    removeCache("user");
+    navigate("/login");
+  };
+
+  const menuItems = [
+    {
+      text: "Books",
+      path: "/",
+    },
+    user.user?.role === "Librarian" && {
+      text: "Create Book",
+      path: "/create",
+    },
+    user.user?.role === "Librarian" && {
+      text: "Show User lists",
+      path: "/lists",
+    },
+  ];
 
   return (
     <div className={classes.root}>
@@ -80,25 +118,57 @@ const Layout = () => {
           <Typography className={classes.date}>
             Library Management System
           </Typography>
-          <Typography>Mario (User)</Typography>
-          <Avatar className={classes.avatar} src={logo} />
+          <div className={classes.avatarContainer} onClick={handleOpenUserMenu}>
+            <Typography>
+              {user && user.user?.name} ({user && user.user?.role})
+            </Typography>
+            <Avatar className={classes.avatar} src={logo} />
+          </div>
         </Toolbar>
+        <Menu
+          sx={{ mt: "45px", minWidth: 200 }}
+          className={classes.menuWidth}
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem onClick={handleLogout}>
+            <Typography
+              textAlign="center"
+              sx={{ color: "var(--primary-color)" }}
+            >
+              Logout
+            </Typography>
+          </MenuItem>
+        </Menu>
       </AppBar>
 
-      {/* side drawer */}
       <Drawer
         className={classes.drawer}
         variant="permanent"
         classes={{ paper: classes.drawerPaper }}
         anchor="left"
       >
-        <div>
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <Typography variant="h5" className={classes.title}>
             Library
           </Typography>
         </div>
 
-        {/* links/list section */}
         <List>
           {menuItems.map((item) => (
             <ListItem
@@ -115,7 +185,7 @@ const Layout = () => {
 
       {/* main content */}
       <div className={classes.page}>
-        <div style={{ marginTop: "6%" }}></div>
+        <div style={{ marginTop: "4rem" }}></div>
         <Outlet />
       </div>
     </div>

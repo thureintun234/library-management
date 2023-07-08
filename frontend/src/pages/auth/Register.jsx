@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const handleRegister = async () => {
     const res = await registerService({ email, password });
@@ -21,6 +22,13 @@ const Register = () => {
           <Typography variant={"h4"} className={styles.header}>
             Register User
           </Typography>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+            sx={{ marginBottom: "1rem" }}
+            autoComplete="off"
+          />
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}

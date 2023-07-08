@@ -4,7 +4,7 @@ const { generateAccessToken } = require("../middlewares/auth.middleware");
 
 const createUser = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role, name } = req.body;
 
     const user = await User.findOne({ email });
     if (user) {
@@ -16,6 +16,7 @@ const createUser = async (req, res) => {
 
     const newUser = await User({
       email,
+      name,
       password: hashedPassword,
       role: role ? role : "User",
     });
@@ -47,7 +48,7 @@ const login = async (req, res) => {
     }
 
     const userForToken = {
-      username: user.username,
+      email: user.email,
       id: user._id,
     };
 
@@ -79,6 +80,7 @@ const getUsers = async (req, res) => {
 
     const userBookDetails = users.map((user) => ({
       email: user.email,
+      name: user.name,
       borrowedBooks: user.bookBorrowed.map((book) => ({
         title: book.title,
         author: book.author,

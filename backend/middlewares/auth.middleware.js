@@ -8,8 +8,16 @@ const authenticateUser = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: "Please login" });
   }
+  let jwtToken;
 
-  jwt.verify(token, config.SECRET_TOKEN, (err, user) => {
+  try {
+    const parsedToken = JSON.parse(token);
+    jwtToken = parsedToken.token;
+  } catch (error) {
+    jwtToken = token;
+  }
+
+  jwt.verify(jwtToken, config.SECRET_TOKEN, (err, user) => {
     if (err) {
       return res.status(400).json({ message: err.message });
     }

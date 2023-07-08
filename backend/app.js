@@ -28,8 +28,8 @@ mongoose
 //middlewares
 app.use(cors());
 app.use(express.json());
-app.use(morgan(morganFormat));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(morgan(morganFormat));
 
 // accepting uploaded photos
 app.use(`${BASE_URL}/uploads`, express.static(path.join(__dirname, "upload")));

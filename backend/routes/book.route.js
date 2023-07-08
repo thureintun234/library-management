@@ -10,5 +10,7 @@ router.post(
   BookController.createBook
 );
 router.put("/:bookId", authenticateUser, BookController.borrowBook);
+router.get("/", authenticateUser, BookController.getBooks);
+router.delete("/:bookId", authenticateUser, BookController.deleteBook);
 
 module.exports = router;
