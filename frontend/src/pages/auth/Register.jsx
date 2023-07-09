@@ -3,16 +3,19 @@ import { useState } from "react";
 import { createUser as registerService } from "../../services/user";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Input from "../../components/global/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
-    const res = await registerService({ email, password });
-    console.log(res);
+    const res = await registerService({ email, password, name });
+    if (res) {
+      navigate("/login");
+    }
   };
 
   return (

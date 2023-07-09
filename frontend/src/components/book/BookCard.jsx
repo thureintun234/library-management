@@ -28,7 +28,7 @@ const BookCard = ({ book }) => {
 
   return (
     <Card sx={{ maxWidth: 300, minWidth: 300, m: 3 }}>
-      <CardMedia sx={{ height: 140 }} image={imgUrl} title={title} />
+      <CardMedia sx={{ height: 160 }} image={imgUrl} title={title} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title} {"  "}{" "}

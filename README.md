@@ -9,6 +9,7 @@
 - React
 - MUI
 - Express
+- Node
 - Mongoose
 - JWT
 - Multer
@@ -24,3 +25,8 @@
 
     yarn run dev (running)
 ```
+
+### Login and Password
+
+- User (email: shadow@gmail.com) (password:1234)
+- Admin/Librarian (email: admin@gmail.com) (password:1234)

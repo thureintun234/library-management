@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@mui/material";
 import LibrarianLogin from "./pages/auth/LibrarianLogin";
 import Login from "./pages/auth/Login";

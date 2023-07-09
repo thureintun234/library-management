@@ -7,7 +7,7 @@ export const URL = {
   LOGIN_URL: "/users/login",
 };
 
-export const login = async (values) => {
+export const login = async (values, isLibrarian = false) => {
   try {
     let response = await apiService(
       URL.LOGIN_URL,
@@ -21,7 +21,15 @@ export const login = async (values) => {
       storeCache("user", JSON.stringify({ user, token }));
     }
 
-    toast.success("Login successful!");
+    const { role } = response.data.user;
+
+    if (role === "Librarian" && isLibrarian) {
+      toast.success("Login successful!");
+    } else if (role === "User" && !isLibrarian) {
+      toast.success("Login successful!");
+    } else if (role !== "Librarian" && isLibrarian) {
+      toast.error("Only Librarian is authorized to Login");
+    }
 
     return response.data;
   } catch (error) {
@@ -35,5 +43,10 @@ export const getUsers = () => {
 };
 
 export const createUser = (values) => {
-  return apiService(URL.BASE_URL, methodService.POST, values, null);
+  try {
+    return apiService(URL.BASE_URL, methodService.POST, values, null);
+  } catch (error) {
+    console.log(error);
+    toast.error(error.response?.data?.message);
+  }
 };
